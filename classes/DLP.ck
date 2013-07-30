@@ -21,7 +21,10 @@ public class DLP{ //data lowpass filter
     fun void stop(){
         updater.exit();
     }
-    fun void freq(float f){
+    
+    fun float freq(){ return lp.freq(); }
+    fun float freq(float f){
         f => lp.freq;
+        return lp.freq();
     } 
 }   
