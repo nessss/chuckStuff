@@ -1,7 +1,7 @@
 public class DLP{ //data lowpass filter
     Step stp => LPF lp => blackhole;
     10 => lp.freq;
-    0.1 => lp.Q;
+    1 => lp.Q;
     0.0 => float data;
     0.0 => float val;
     samp => dur rate; //how much computation
