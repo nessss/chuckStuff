@@ -1,5 +1,5 @@
 public class DLP{ //data lowpass filter
-    Step stp => LPF lp => blackhole;
+    Step stp => LPF lp;
     10 => lp.freq;
     1 => lp.Q;
     0.0 => float data;
@@ -15,10 +15,12 @@ public class DLP{ //data lowpass filter
     }
     
     fun void go(){
+    	lp=>blackhole;
         spork~update() @=> updater;
     }
     
     fun void stop(){
+    	lp=<blackhole;
         updater.exit();
     }
     
