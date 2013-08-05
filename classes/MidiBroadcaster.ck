@@ -8,22 +8,27 @@ public class MidiBroadcaster{
     
     int devices;
     
-    for( int i; i < minCheck.cap(); i++ ){
-        // no print err
-        minCheck[i].printerr( 0 );
-        
-        // open the device
-        if( minCheck[i].open( i ) ){
-            if(minCheck[i].name()=="Ableton Push User Port"){
-                minCheck[i]@=>min;
-                break;
-            }
-        }else break;
+    fun void init(){
+    	openMidi(0);
+        spork~loop()@=>loopShred;
     }
     
-    fun void init(){
-        //<<<min.name(),"">>>;
-        spork~loop()@=>loopShred;
+    fun void init(int port){
+    	openMidi(port);
+    	spork~loop()@=>loopShred;
+    }
+    
+    fun void init(string portName){
+    	openMidi(portName);
+    	spork~loop()@=>loopShred;
+    }
+    
+    fun void openMidi(int port){
+    	min.open(port);
+    }
+    
+    fun void openMidi(string portName){
+    	min.open(portName);
     }
     
     fun string name(){
