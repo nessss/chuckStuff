@@ -9,7 +9,6 @@ public class ArrayTools{
 
 	fun static int[] concat(int a[],int b[],int c[]){return concat(concat(a,b),c);}
 	fun static int[] concat(int a[],int b[]){
-		<<<"Concatenating...","">>>;
 		if(a.size()==0)return b;
 		if(b.size()==0)return a;
 		int result[a.cap()+b.cap()];
@@ -20,7 +19,6 @@ public class ArrayTools{
 				b[i-a.cap()]=>result[i];
 			}
 		}
-		<<<"Done.","">>>;
 		return result;
 	}
 	
