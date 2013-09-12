@@ -25,6 +25,18 @@ public class Sampler extends Chubgraph{
 
 
 	//--------------------------| FILTER FUNCTIONS |--------------------------
+
+	fun Filter connectedFilter(int b){
+		if(buf[b].isConnectedTo(lpf[b])){
+			return lpf[b];
+		}else if(buf[b].isConnectedTo(hpf[b])){
+			return hpf[b];
+		}else if(buf[b].isConnectedTo(bpf[b])){
+			return bpf[b];
+		}
+		return new Filter;
+	}
+
 	fun void setFilter(int b,string f){
 		buf[b]=<connectedFilter(buf[b])=<outlet;
 		buf[b]=<outlet;
@@ -39,16 +51,7 @@ public class Sampler extends Chubgraph{
 		}
 	}
 
-	fun Filter connectedFilter(int b){
-		if(buf[b].isConnectedTo(lpf[b])){
-			return lpf[b];
-		}else if(buf[b].isConnectedTo(hpf[b])){
-			return hpf[b];
-		}else if(buf[b].isConnectedTo(bpf[b])){
-			return bpf[b];
-		}
-		return new Filter;
-	}
+
 
 	fun float filterFreq(int b){
 		return connectedFilter(buf[b]).freq();
@@ -117,7 +120,7 @@ public class Sampler extends Chubgraph{
 	}
 
 	fun int loop(int b,int l){
-		return buf[b].loop(b);
+		return buf[b].loop(l);
 	}
 
 	fun int interp(int b,int l){
