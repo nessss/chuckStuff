@@ -16,8 +16,10 @@ public class SndBufPlus extends Chubgraph{
 	fun void init(){
 		0::samp=>startDur;
 		length()=>endDur=>lengthDur;
+
 		0=>startPhs;
 		1=>endPhs=>lengthPhs;
+
 		0=>startPos;
 		samples()=>endPos=>lengthSamps;
 	}
@@ -31,6 +33,17 @@ public class SndBufPlus extends Chubgraph{
 		pos(startPos);
 		lengthDur=>now;
 		pos(buf.samples());
+	}
+
+	fun void mute(){
+		pos(samples());
+	}
+
+	fun void reverse(){
+		rate(-1.0*rate());
+		startDur=>dur tempDur;
+		startDuration(endDur);
+		endDuration(tempDur);
 	}
 
 	//------------------------|  PHASE FUNCTIONS  |------------------------
@@ -114,9 +127,9 @@ public class SndBufPlus extends Chubgraph{
 	}
 
 	fun void _durToPos(){
-		startDur/samp=>startPos;
-		endDur/samp=>endPos;
-		lengthDur/samp=>endPos;
+		(startDur/samp)$int=>startPos;
+		(endDur/samp)$int=>endPos;
+		(lengthDur/samp)$int=>endPos;
 	}
 
 	//------------------------| POS FUNCTIONS |------------------------
@@ -138,8 +151,8 @@ public class SndBufPlus extends Chubgraph{
 
 	fun int lengthSamples(){return lengthSamps;}
 	fun int lengthSamples(int l){
-		unitClip(p,0,samples());
-		p=>lengthSamps;
+		unitClip(l,0,samples());
+		l=>lengthSamps;
 		_posToPhs();
 		_posToDur();
 	}
