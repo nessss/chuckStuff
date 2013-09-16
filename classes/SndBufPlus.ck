@@ -32,7 +32,11 @@ public class SndBufPlus extends Chubgraph{
 	fun void _trigger(){
 		pos(startPos);
 		lengthDur=>now;
-		pos(buf.samples());
+		if(rate>0){
+			pos(buf.samples());
+		}else{
+			pos(0);
+		}
 	}
 
 	fun void mute(){
