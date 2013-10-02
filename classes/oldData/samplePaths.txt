@@ -1,0 +1,12 @@
+CYmbal0001.aif
+Clap.aif
+Closed Hihat0001.aif
+Hi Conga0001.aif
+Hi Tom0001.aif
+KickDrum0001.aif
+Low Conga0001.aif
+Low Tom0001.aif
+Mid Conga0001.aif
+Mid Tom0001.aif
+Open Hihat0001.aif
+SnareDrum0001.aif

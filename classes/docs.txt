@@ -1,0 +1,49 @@
+------\ SndBufPlus /------
+
+Chubgraph that gives an interface for basic
+sample manipulation, with comprehensive control
+over sample start and end points.
+
+All methods from SndBuf have been exposed.
+
+trigger()- triggers the sample to play
+	back from the start point until end
+	point
+
+stop()-	stops the sample
+
+reverse()- reverses playback direction
+
+normalize()- adjusts gain so that highest value
+	sample = 1.0
+
+
+startPhase(float, read/write)-
+	sets the start position as phase position
+
+endPhase(float,read/write)-
+	sets the end position as phase position
+
+lengthPhase(float, read/write)- 
+	sets the playback length as phase amount
+
+startPosition(int, read/write)-
+	sets the start position as sample index
+
+endPosition(int, read/write)-
+	sets the end position as sample index
+
+lengthSamples(int read/write)-
+	sets the playback length as number of
+	samples
+
+startDuration(dur, read/write)-
+	sets the start position as duration
+	into the sample
+
+endDuration(dur, read/write)-
+	sets the end posistion as duration
+	into the sample
+
+lengthDuration(dur, read/write)-
+	sets the playback duration

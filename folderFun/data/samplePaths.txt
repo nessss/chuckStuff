@@ -1,0 +1,11 @@
+Think1_Habo.wav
+Think2_YouBad.wav
+Think3_BadSucka.wav
+Think4_Woo.wav
+Think5_Shaker.wav
+bonangBarung2HighMute.aif
+bonangBarung2HighStrikeAndMute.aif
+bonangBarung2HighSustain.aif
+bonangBarung2LowMute.aif
+bonangBarung2LowStrikeAndMute.aif
+bonangBarung2LowSustain.aif
