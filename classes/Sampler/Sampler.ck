@@ -7,7 +7,7 @@ public class Sampler{
 	string paths[0];
 
 	fun void init(string folder){
-		getPaths(folder);
+		getPaths(folder)@=>paths;
 		new SndBufN[paths.size()]@=>buf;
 		new LPF[paths.size()]@=>lpf;
 		new HPF[paths.size()]@=>hpf;
@@ -15,6 +15,7 @@ public class Sampler{
 
 		for(int i;i<paths.size();i++){
 			buf[i].read(paths[i]);
+			buf[i].pos(buf[i].samples());
 			setFilter(i,"none");
 		}
 	}
@@ -24,15 +25,30 @@ public class Sampler{
 	fun string[] getPaths(string folder){
 		string paths[0];
 		FileIO fio;
-		fio.open(me.dir()+"/data/"+folder+"/samplePaths.txt",FileIO.READ);
+		fio.open(me.dir()+"/samplePaths.txt",FileIO.READ);
 		while(fio.more()){
 			fio.readLine()=>string line;
 			if(line!=""){
-				me.dir()+"/data/"+line=>line;
-				paths<<line;
+				if(RegEx.match(folder, line)||(folder=="")){
+					paths<<line;
+				}
 			}
 		}
 		return paths;
+	}
+
+	fun string getKit(int p){
+		string matches[0];
+		RegEx.match("/data/([0-9a-zA-Z]+)/",paths[p],matches);
+		if(matches.size()>1)return matches[1];
+		return "";
+	}
+
+	fun string getName(int p){
+		string matches[0];
+		RegEx.match("/data/[0-9a-zA-Z]+/[0-9a-zA-Z]+/([0-9a-zA-Z]+)",paths[p],matches);
+		if(matches.size()>1)return matches[1];
+		return "";
 	}
 
 	//--------------------------| FILTER FUNCTIONS |--------------------------
@@ -92,68 +108,67 @@ public class Sampler{
 		return results;
 	}
 
-	fun int pos(int b,int s){return buf[b].pos(s);}
-	fun int pos(int b,int p,int s){return buf[b].pos(s,p);}
-
-	fun int[] posAll(int b,int s){
+	fun int pos(int b){return buf[b].pos();}
+	fun int pos(int b,int p){return buf[b].pos(p);} 
+	fun int[] posAll(int b){
 		int results[buf.size()];
-		for(int i;i<results.size();i++)buf[i].pos(s)=>results[i];
+		for(int i;i<results.size();i++)buf[i].pos()=>results[i];
 		return results;
 	}
 
 	fun float gain(int b){return buf[b].gain();}
 	fun float gain(int b,float g){return buf[b].gain(g);}
 
-	fun float[] gainAll(int b,int s){
+	fun float[] gainAll(int b){
 		float results[buf.size()];
-		for(int i;i<results.size();i++)buf[i].gain(s)=>results[i];
+		for(int i;i<results.size();i++)buf[i].gain()=>results[i];
 		return results;
 	}
 
-	fun float phase(int b,int s){return buf[b].phase(s);}
-	fun float phase(int b,float p,int s){return buf[b].phase(s,p);}
+	fun float phase(int b){return buf[b].phase();}
+	fun float phase(int b,float p){return buf[b].phase(p);}
 
-	fun float[] phaseAll(int b,int s){
+	fun float[] phaseAll(int b){
 		float results[buf.size()];
-		for(int i;i<results.size();i++)buf[i].phase(s)=>results[i];
+		for(int i;i<results.size();i++)buf[i].phase()=>results[i];
 		return results;
 	}
 
-	fun float valueAt(int b,int s,int sample){return buf[b].valueAt(sample,s);}
+	fun float valueAt(int b,int sample,int s){return buf[b].valueAt(s,sample);}
 
-	fun int loop(int b,int s){return buf[b].loop(s);}
-	fun int loop(int b,int l,int s){return buf[b].loop(s,l);}
+	fun int loop(int b){return buf[b].loop();}
+	fun int loop(int b,int l){return buf[b].loop(l);}
 
-	fun int[] loopAll(int b,int s){
+	fun int[] loopAll(int b){
 		int results[buf.size()];
-		for(int i;i<results.size();i++)buf[i].loop(s)=>results[i];
+		for(int i;i<results.size();i++)buf[i].loop()=>results[i];
 		return results;
 	}
 
-	fun int interp(int b,int s){return buf[b].interp(s);}
-	fun int interp(int b,int i,int s){return buf[b].interp(s,i);}
+	fun int interp(int b){return buf[b].interp();}
+	fun int interp(int b,int i){return buf[b].interp(i);}
 
-	fun int[] interpAll(int b,int s){
+	fun int[] interpAll(int b){
 		int results[buf.size()];
-		for(int i;i<results.size();i++)buf[i].interp(s)=>results[i];
+		for(int i;i<results.size();i++)buf[i].interp()=>results[i];
 		return results;
 	}
 
-	fun float rate(int b,int s){return buf[b].rate(s);}
-	fun float rate(int b,float r,int s){return buf[b].rate(s,r);}
+	fun float rate(int b){return buf[b].rate();}
+	fun float rate(int b,float r){return buf[b].rate(r);}
 
-	fun float[] rateAll(int b,int s){
-		float results[buf.size(s)];
-		for(int i;i<results.size();i++)buf[i].rate(s)=>results[i];
+	fun float[] rateAll(int b){
+		float results[buf.size()];
+		for(int i;i<results.size();i++)buf[i].rate()=>results[i];
 		return results;
 	}
 
-	fun float freq(int b,int s){return buf[b].freq(s);}
-	fun float freq(int b,float f,int s){return buf[b].freq(s,f);}
+	fun float freq(int b){return buf[b].freq();}
+	fun float freq(int b,float f){return buf[b].freq(f);}
 
-	fun float[] freqAll(int b,int s){
-		float results[buf.size(s)];
-		for(int i;i<results.size();i++)buf[i].freq(s)=>results[i];
+	fun float[] freqAll(int b){
+		float results[buf.size()];
+		for(int i;i<results.size();i++)buf[i].freq()=>results[i];
 		return results;
 	}
 

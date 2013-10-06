@@ -2,12 +2,14 @@ Sampler s;
 
 s.output=>dac;
 
-s.init("808/Kicks");
+s.init("kck");
+<<<s.paths.size()>>>;
 
-s.trigger(0);
-
-1::second => now;
-
-s.trigger(1);
-
-while(samp=>now);
+int i;
+while(second=>now){
+	<<<s.paths[i]>>>;
+	<<<s.getKit(i),s.getName(i)>>>;
+	s.trigger(i);
+	i++;
+	s.paths.size()%=>i;
+}
