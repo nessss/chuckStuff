@@ -3,16 +3,29 @@ public class SndBufN{
 	SndBufPlus buf[1];
 	int chan;
 
+	Event done;
+
 	fun void init(string path,int c){
 		c=>chan;
-		new SndBufPlus[c]@=>buf;
-		for(int i;i<buf.size();i++){
-			buf[i].read(path);
-			buf[i].channel(i);
-			if(i%2)buf[i]=>output.right;
-			else buf[i]=>output.left;
+		if(c>1){
+			new SndBufPlus[c]@=>buf;
+			for(int i;i<buf.size();i++){
+				buf[i].read(path);
+				buf[i].channel(i);
+				if(i%2)buf[i]=>output.right;
+				else buf[i]=>output.left;
+			}
+		}else{
+			buf[0]=>output;
 		}
+        spork~doneLoop();
 	}
+    
+    fun void doneLoop(){
+        while(buf[0].done=>now){
+            done.broadcast();
+        }
+    }
 
 	fun int isConnectedTo(UGen u){
 		return buf[0].isConnectedTo(u);
@@ -25,7 +38,7 @@ public class SndBufN{
 		}
 		return buf[0].gain();
 	}
-	
+
 	fun int channels(){return chan;}
 	fun int channels(int c){
 		c=>chan;
@@ -47,7 +60,7 @@ public class SndBufN{
 		for(int i;i<buf.size();i++){
 			buf[i].stop();
 		}
-		
+
 	}
 
 	fun void reverse(){

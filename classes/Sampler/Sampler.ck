@@ -3,8 +3,11 @@ public class Sampler{
 	LPF lpf[];
 	HPF hpf[];
 	BPF bpf[];
+	Pan2 dry[];
+    int voices[];
 	Pan2 output;
 	string paths[0];
+    int numSounds;
 
 	fun void init(string folder){
 		getPaths(folder)@=>paths;
@@ -12,12 +15,15 @@ public class Sampler{
 		new LPF[paths.size()]@=>lpf;
 		new HPF[paths.size()]@=>hpf;
 		new BPF[paths.size()]@=>bpf;
+		new Pan2[paths.size()]@=>dry;
+        new int[paths.size()]@=>voices;
 
 		for(int i;i<paths.size();i++){
 			buf[i].read(paths[i]);
 			buf[i].pos(buf[i].samples());
-			setFilter(i,"none");
+			buf[i].output=>dry[i];
 		}
+        paths.cap()=>numSounds;
 	}
 
 
@@ -30,7 +36,7 @@ public class Sampler{
 			fio.readLine()=>string line;
 			if(line!=""){
 				if(RegEx.match(folder, line)||(folder=="")){
-					paths<<line;
+					paths<<me.dir()+line.substring(1);
 				}
 			}
 		}
@@ -64,17 +70,25 @@ public class Sampler{
 		return new FilterBasic;
 	}
 
+	fun UGen connectedUGen(int b){
+		if(buf[b].output.isConnectedTo(dry[b])){
+			chout<="I'm dry!"<=IO.nl();
+			return dry[b];
+		}
+		return dry[b];
+		return connectedFilter(b);
+	}
+
 	fun void setFilter(int b,string f){
-		buf[b].output=<connectedFilter(b)=<output;
-		buf[b].output=<output;
+		buf[b].output=<connectedUGen(b);
 		if(f=="LPF"){
-			buf[b].output=>lpf[b]=>output;
+			buf[b].output=>lpf[b];
 		}else if(f=="HPF"){
-			buf[b].output=>hpf[b]=>output;
+			buf[b].output=>hpf[b];
 		}else if(f=="BPF"){
-			buf[b].output=>bpf[b]=>output;
+			buf[b].output=>bpf[b];
 		}else if(f=="none"){
-			buf[b].output=>output;
+			buf[b].output=>dry[b];
 		}
 	}
 
@@ -98,7 +112,18 @@ public class Sampler{
 
 	//--------------------------| SNDBUF FUNCTIONS |--------------------------
 
-	fun void trigger(int b){buf[b].trigger();}
+	fun void trigger(int b){spork~_trigger(b);}
+
+	fun void _trigger(int b){
+        if(voices[b]==0)
+            connectedUGen(b)=>output;
+        voices[b]++;
+		buf[b].trigger();
+		buf[b].done=>now;
+        voices[b]--;
+        if(voices[b]==0)
+            connectedUGen(b)=<output;
+	}
 
 	fun int samples(int b,int s){return buf[b].samples(s);}
 

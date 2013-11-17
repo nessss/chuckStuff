@@ -43,7 +43,7 @@ public class BubbleSort{
 		for(int i;i<a.size();i++){
 			a[i]+" "+=>printy;
 		}
-		<<<printy,"">>>;
+		chout<=printy<=IO.nl();
 	}
 
 
@@ -90,14 +90,15 @@ public class BubbleSort{
 		}
 		return a;
 	}
-	fun int checkOrder(int a[]){
-		return checkOrder(a,0);
-	}
+
+	fun int checkOrder(int a[]){return checkOrder(a,0);}
 	fun int checkOrder(int a[],int verbosity){
-		1=>int r;	// default result is in order
-		for(int i;i<a.size()-1;i++){
-			if(a[i]>a[i+1])0=>r;		// if any element is greater than the next,
-		}if(verbosity)printArray(a);	// array is out of order
-		return r;				
+		for(int i;i<a.cap()-1;i++){
+			if(a[i]>a[i+1]){
+				return 0;	// if any element is greater than the next,
+				break;						// array is out of order
+			}
+		}if(verbosity)printArray(a);
+		return 1;				
 	}
 }
