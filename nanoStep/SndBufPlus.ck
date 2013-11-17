@@ -45,6 +45,11 @@ public class SndBufPlus extends Chubgraph{
 	}
 
 	fun void stop(){
+		buf.gain()=>float beginGain;
+		for(int i;i<100;i++){
+			beginGain/100-=>buf.gain;
+			samp=>now;
+		}
 		if(rate()>0){
 			pos(buf.samples());
 		}else{
