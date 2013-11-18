@@ -199,7 +199,7 @@ fun void showEditing(){
     if(rseq[drumSel].patEditing() != rseq[drumSel].patPlaying()) midiOut(nano.cyc, 0);
     else midiOut(nano.cyc, 127);
     //Updates step LEDs
-    for(int i; i<rseq[0].patLength(); i++){
+    for(int i; i<16; i++){
         updateStep(i);
     }
 }
