@@ -148,6 +148,23 @@
 ./data/amen/kick.aif
 ./data/amen/kicklet1.aif
 ./data/amen/kicklet2.aif
+<<<<<<< HEAD
 ./data/amen/ride.aif
 ./data/amen/snare.aif
 ./data/amen/snarelet.aif
+=======
+./data/sweet_pea/kick.aif
+./data/sweet_pea/snare.aif
+./data/sweet_pea/kicklet.aif
+./data/sweet_pea/rush1.aif
+./data/sweet_pea/rush2.aif
+./data/sweet_pea/snarelet.aif
+./data/cold_sweat/kick.aif
+./data/cold_sweat/snare.aif
+./data/cold_sweat/ride.aif
+./data/cold_sweat/kick.aif
+./data/cold_sweat/rush1.aif
+./data/cold_sweat/rush2.aif
+./data/cold_sweat/snarelet.aif
+
+>>>>>>> cef53aadbfc54194f7775c91effdb5e8d3cc709a
