@@ -95,3 +95,11 @@
 ./data/Misc/snrclp/SBclp1.wav
 ./data/Misc/tomprc/EPshk.wav
 ./data/808/snrclp/clp.aif
+./data/amen/kick.aif
+./data/amen/snare.aif
+./data/amen/snarelet.aif
+./data/amen/kicklet.aif
+./data/amen/crash.aif
+./data/amen/kicklet1.aif
+./data/amen/kicklet2.aif
+./data/amen/ride.aif
