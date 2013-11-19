@@ -44,7 +44,8 @@ public class SndBufPlus extends Chubgraph{
         }
 	}
 
-	fun void stop(){
+	fun void stop(){spork~_stop();}
+	fun void _stop(){
 		buf.gain()=>float beginGain;
 		for(int i;i<100;i++){
 			buf.gain()-beginGain/100=>buf.gain;
