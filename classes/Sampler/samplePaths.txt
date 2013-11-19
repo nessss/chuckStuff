@@ -94,14 +94,65 @@
 ./data/Misc/snrclp/EPsnr1.wav
 ./data/Misc/snrclp/SBclp1.wav
 ./data/Misc/tomprc/EPshk.wav
+./data/SharpSamples/AcBass/hi-1.wav
+./data/SharpSamples/AcBass/hi-2.wav
+./data/SharpSamples/AcBass/hi.wav
+./data/SharpSamples/AcBass/lo1-1.wav
+./data/SharpSamples/AcBass/lo1-2.wav
+./data/SharpSamples/AcBass/lo1-3.wav
+./data/SharpSamples/AcBass/lo1.wav
+./data/SharpSamples/AcBass/lo2-1.wav
+./data/SharpSamples/AcBass/lo2.wav
+./data/SharpSamples/CheckIt/Blazin.wav
+./data/SharpSamples/CheckIt/Check it.wav
+./data/SharpSamples/CheckIt/Fuckin.wav
+./data/SharpSamples/CheckIt/I'm the.wav
+./data/SharpSamples/CheckIt/ig.wav
+./data/SharpSamples/CheckIt/man.wav
+./data/SharpSamples/CheckIt/mention.wav
+./data/SharpSamples/CheckIt/stuff.wav
+./data/SharpSamples/CheckIt/that.wav
+./data/SharpSamples/CheckIt/the.wav
+./data/SharpSamples/CheckIt/Who they.wav
+./data/SharpSamples/gunshot.wav
+./data/SharpSamples/Sharp/'y.wav
+./data/SharpSamples/Sharp/pa.wav
+./data/SharpSamples/Sharp/Sharp.wav
+./data/SharpSamples/Sharp/Shoo.wav
+./data/SharpSamples/Sharp/Shoo2.wav
+./data/SharpSamples/Sharp/Shots.wav
+./data/SharpSamples/Sharp/Su.wav
+./data/SharpSamples/Sharp/tah.wav
+./data/SharpSamples/Spell/A.wav
+./data/SharpSamples/Spell/E.wav
+./data/SharpSamples/Spell/H.wav
+./data/SharpSamples/Spell/M.wav
+./data/SharpSamples/Spell/O.wav
+./data/SharpSamples/Spell/P.wav
+./data/SharpSamples/Spell/R.wav
+./data/SharpSamples/Spell/S.wav
+./data/SharpSamples/Spell/T.wav
+./data/SharpSamples/Spell/theA.wav
+./data/SharpSamples/Spell/theE.wav
+./data/SharpSamples/Spell/theH.wav
+./data/SharpSamples/Spell/theO.wav
+./data/SharpSamples/Spell/theP.wav
+./data/SharpSamples/Spell/theR.wav
+./data/SharpSamples/Spell/theS.wav
+./data/SharpSamples/Spell/theT.wav
+./data/SharpSamples/Spell/theU.wav
+./data/SharpSamples/Spell/U.wav
+./data/SharpSamples/synBass.wav
 ./data/808/snrclp/clp.aif
-./data/amen/kick.aif
-./data/amen/snare.aif
-./data/amen/snarelet.aif
-./data/amen/kicklet.aif
 ./data/amen/crash.aif
+./data/amen/kick.aif
 ./data/amen/kicklet1.aif
 ./data/amen/kicklet2.aif
+<<<<<<< HEAD
+./data/amen/ride.aif
+./data/amen/snare.aif
+./data/amen/snarelet.aif
+=======
 ./data/sweet_pea/kick.aif
 ./data/sweet_pea/snare.aif
 ./data/sweet_pea/kicklet.aif
@@ -116,3 +167,4 @@
 ./data/cold_sweat/rush2.aif
 ./data/cold_sweat/snarelet.aif
 
+>>>>>>> cef53aadbfc54194f7775c91effdb5e8d3cc709a

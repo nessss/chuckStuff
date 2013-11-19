@@ -8,6 +8,7 @@ public class Sampler{
 	Pan2 output;
 	string paths[0];
     int numSounds;
+    Shred triggerShred[];
 
 	fun void init(string folder){
 		getPaths(folder)@=>paths;
@@ -17,6 +18,7 @@ public class Sampler{
 		new BPF[paths.size()]@=>bpf;
 		new Pan2[paths.size()]@=>dry;
         new int[paths.size()]@=>voices;
+        new Shred[paths.size()]@=>triggerShred;
 
 		for(int i;i<paths.size();i++){
 			buf[i].read(paths[i]);
@@ -112,17 +114,42 @@ public class Sampler{
 
 	//--------------------------| SNDBUF FUNCTIONS |--------------------------
 
-	fun void trigger(int b){spork~_trigger(b);}
+	fun void trigger(int b){spork~_trigger(b)@=>triggerShred[b];}
 
 	fun void _trigger(int b){
-        if(voices[b]==0)
+        if(voices[b]==0){
             connectedUGen(b)=>output;
-        voices[b]++;
+        	voices[b]++;
+        }else{
+        	buf[b].stop();
+        	100::samp=>now;
+        	voices[b]++;
+        }
 		buf[b].trigger();
 		buf[b].done=>now;
+		buf[b].stop();
         voices[b]--;
-        if(voices[b]==0)
+        if(voices[b]==0){
+        	100::ms=>now;
             connectedUGen(b)=<output;
+        }
+	}
+
+	fun int isPlaying(int b){
+		if(voices[b])return 1;
+		return 0;
+	}
+
+	fun void stop(int b){
+		//triggerShred[b].exit();
+		buf[b].done.broadcast();
+		//0=>voices[b];
+		//100::samp=>now;
+		//connectedUGen(b)=<output;
+	}
+
+	fun float pitch(int b,float s){
+		return rate(b,Std.mtof(s)/Std.mtof(60.0));
 	}
 
 	fun int samples(int b,int s){return buf[b].samples(s);}
