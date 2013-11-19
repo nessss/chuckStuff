@@ -47,7 +47,7 @@ public class SndBufPlus extends Chubgraph{
 	fun void stop(){
 		buf.gain()=>float beginGain;
 		for(int i;i<100;i++){
-			beginGain/100-=>buf.gain;
+			buf.gain()-beginGain/100=>buf.gain;
 			samp=>now;
 		}
 			
@@ -56,7 +56,7 @@ public class SndBufPlus extends Chubgraph{
 		}else{
 			pos(0);
 		}
-		beginGain=>buf.gain();
+		beginGain=>buf.gain;
 	}
 
 	fun void reverse(){
