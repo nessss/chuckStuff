@@ -3,16 +3,32 @@ public class SndBufN{
 	SndBufPlus buf[1];
 	int chan;
 
+	Event done;
+
 	fun void init(string path,int c){
 		c=>chan;
-		new SndBufPlus[c]@=>buf;
-		for(int i;i<buf.size();i++){
-			<<<buf[i].read(path)>>>;
-			<<<buf[i].channel(i)>>>;
-			if(i%2)buf[i]=>output.right;
-			else buf[i]=>output.left;
+		if(c>1){
+			new SndBufPlus[c]@=>buf;
+			for(int i;i<buf.size();i++){
+				buf[i].read(path);
+				buf[i].channel(i);
+				if(i%2)buf[i]=>output.right;
+				else buf[i]=>output.left;
+			}
+		}else{
+			buf[0]=>output;
 		}
-		<<<buf.size()>>>;
+        spork~doneLoop();
+	}
+    
+    fun void doneLoop(){
+        while(buf[0].done=>now){
+            done.broadcast();
+        }
+    }
+
+	fun int isConnectedTo(UGen u){
+		return buf[0].isConnectedTo(u);
 	}
 
 	fun float gain(){return buf[0].gain();}
@@ -22,7 +38,7 @@ public class SndBufN{
 		}
 		return buf[0].gain();
 	}
-	
+
 	fun int channels(){return chan;}
 	fun int channels(int c){
 		c=>chan;
@@ -44,7 +60,7 @@ public class SndBufN{
 		for(int i;i<buf.size();i++){
 			buf[i].stop();
 		}
-		
+
 	}
 
 	fun void reverse(){
@@ -115,5 +131,85 @@ public class SndBufN{
 		for(int i;i<buf.size();i++){
 			buf[i].lengthDuration(d);
 		}
+		return buf[0].lengthDuration();
 	}
+
+	fun int chunks(){return buf[0].chunks();}
+	fun int chunks(int c){
+		for(int i;i<buf.size();i++){
+			buf[i].chunks(c);
+		}
+		return buf[0].chunks();
+	}
+
+	fun int pos(){return buf[0].pos();}
+	fun int pos(int p){
+		for(int i;i<buf.size();i++){
+			buf[i].pos(p);
+		}
+		return buf[0].pos();
+	}
+
+	fun float valueAt(int b,int p){return buf[b].valueAt(p);}
+
+	fun int loop(){return buf[0].loop();}
+	fun int loop(int l){
+		for(int i;i<buf.size();i++){
+			buf[i].loop(l);
+		}
+		return buf[0].loop();
+	}
+
+	fun int interp(){return buf[0].interp();}
+	fun int interp(int in){
+		for(int i;i<buf.size();i++){
+			buf[i].interp(in);
+		}
+		return buf[0].interp();
+	}
+
+	fun float rate(){return buf[0].rate();}
+	fun float rate(float r){
+		for(int i;i<buf.size();i++){
+			buf[i].rate(r);
+		}
+		return buf[0].rate();
+	}
+
+	fun float play(){return buf[0].play();}
+	fun float play(float r){
+		for(int i;i<buf.size();i++){
+			buf[i].play(r);
+		}
+		return buf[0].play();
+	}
+
+	fun float freq(){return buf[0].freq();}
+	fun float freq(float f){
+		for(int i;i<buf.size();i++){
+			buf[i].freq(f);
+		}
+		return buf[0].freq();
+	}
+
+	fun float phase(){return buf[0].phase();}
+	fun float phase(float p){
+		for(int i;i<buf.size();i++){
+			buf[i].phase(p);
+		}
+		return buf[0].phase();
+	}
+
+	fun int channel(int b){return buf[b].channel();}
+	fun int channel(int b, int c){return buf[b].channel(c);}
+
+	//	fun float phaseOffset(){return buf[b].phaseOffset();}          // these don't work in the base SndBuf class
+	//	fun float phaseOffset(float o){return buf[b].phaseOffset(o);}
+
+	fun int samples(){return buf[0].samples();}
+	fun int samples(int b){return buf[b].samples();}
+
+	fun dur length(){return buf[0].length();}
+
+	fun int channels(int b){return buf[b].channels();}
 }

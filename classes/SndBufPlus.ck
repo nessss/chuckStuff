@@ -1,6 +1,5 @@
 public class SndBufPlus extends Chubgraph{
-	Pan2 output;
-	SndBuf buf=>output=>outlet;
+	SndBuf buf=>outlet;
 
 	dur startDur;
 	dur endDur;
@@ -13,6 +12,10 @@ public class SndBufPlus extends Chubgraph{
 	int startPos;
 	int endPos;
 	int lengthSamps;
+    
+    int voices;
+
+	Event done;
 
 	fun void init(){
 		0::samp=>startDur;
@@ -31,12 +34,22 @@ public class SndBufPlus extends Chubgraph{
 	}
 
 	fun void _trigger(){
+        voices++;
 		pos(startPos);
 		lengthDur=>now;
-		stop();
+        voices--;
+        if(voices==0){
+            stop();
+            done.broadcast();
+        }
 	}
 
 	fun void stop(){
+		buf.gain()=>float beginGain;
+		for(int i;i<100;i++){
+			buf.gain() -( beginGain/100) =>buf.gain;
+			samp=>now;
+		}
 		if(rate()>0){
 			pos(buf.samples());
 		}else{
@@ -220,8 +233,8 @@ public class SndBufPlus extends Chubgraph{
 	}
 
 	//------------------------|     NORMALIZE    |-----------------------
-	fun float gain(){return output.gain();}
-	fun float gain(float g){return output.gain(g);}
+	fun float gain(){return buf.gain();}
+	fun float gain(float g){return buf.gain(g);}
 
 	fun void normalize(){
 		float max;
