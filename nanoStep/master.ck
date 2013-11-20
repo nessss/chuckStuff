@@ -1,10 +1,10 @@
-Machine.add(me.dir()+"/SndBufPlus.ck");
-Machine.add(me.dir()+"/SndBufN.ck");
-Machine.add(me.dir()+"/Sampler.ck");
+Machine.add(me.dir(-1)+"/classes/Sampler/SndBufPlus.ck");
+Machine.add(me.dir(-1)+"/classes/Sampler/SndBufN.ck");
+Machine.add(me.dir(-1)+"/classes/Sampler/Sampler.ck");
 
-Machine.add(me.dir()+"/Clock_3.0.ck");
-Machine.add(me.dir()+"/Sequencer_1.0.ck");
-Machine.add(me.dir()+"/RhythmSequencer_1.0.ck");
+Machine.add(me.dir(-1)+"/classes/Clock.ck");
+Machine.add(me.dir(-1)+"/classes/Sequencer.ck");
+Machine.add(me.dir(-1)+"/classes/RhythmSequencer.ck");
 
-Machine.add(me.dir()+"/NanoKONTROL2.ck");
-Machine.add(me.dir()+"/nanoStep2.1.ck");
+Machine.add(me.dir(-1)+"/classes/NanoKONTROL2.ck");
+Machine.add(me.dir()+"/nanoStep.ck");

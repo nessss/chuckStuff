@@ -34,7 +34,7 @@ public class NanoKONTROL2{
     fun int isFader(int cc){
     	0=>int result;
     	for(int i;i<fader.size();i++){
-    		if(cc=fader[i])1=>result;
+    		if(cc==fader[i])1=>result;
     	}
     	return result;
     }
@@ -49,7 +49,7 @@ public class NanoKONTROL2{
     fun int isKnob(int cc){
     	0=>int result;
     	for(int i;i<knob.size();i++){
-    		if(cc=knob[i])1=>result;
+    		if(cc==knob[i])1=>result;
     	}
     	return result;
     }
@@ -64,8 +64,8 @@ public class NanoKONTROL2{
     fun int isButton(int cc){
     	0=>int result;
     	for(int i;i<button.size();i++){
-    		for(int j,j<button[0].size();i++){
-    			if(cc=button[i][j])1=>result;
+    		for(int j; j<button[0].size(); j++){
+    			if(cc==button[i][j])1=>result;
     		}
     	}
     	return result;
@@ -82,8 +82,8 @@ public class NanoKONTROL2{
     	-1=>int result;
     	if(isButton(cc)){
     		for(int i;i<button.size();i++){
-    			for(int j,j<button[0].size();i++){
-    				if(cc=button[i][j])i=>result;
+    			for(int j;j<button[0].size();j++){
+    				if(cc==button[i][j])i=>result;
     			}
     		}
     	}
@@ -94,8 +94,8 @@ public class NanoKONTROL2{
     	-1=>int result;
     	if(isButton(cc)){
     		for(int i;i<button.size();i++){
-    			for(int j,j<button[0].size();i++){
-    				if(cc=button[i][j])j=>result;
+    			for(int j;j<button[0].size();j++){
+    				if(cc==button[i][j])j=>result;
     			}
     		}
     	}
@@ -105,7 +105,7 @@ public class NanoKONTROL2{
     fun int isTransport(int cc){
     	0=>int result;
     	for(int i;i<trans.size();i++){
-    		if(cc=trans[i])1=>result;
+    		if(cc==trans[i])1=>result;
     	}
     	return result;
     }	
