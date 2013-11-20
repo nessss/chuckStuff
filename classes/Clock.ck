@@ -13,13 +13,13 @@ public class Clock{
     
     
     //Functions
-    fun void init(){
+    fun void init(float nTempo){
         xmit.setHost("localhost", 98765);
         1 => stepDiv;
         0 => metroOn;
         0 => swingMode;
         Math.FLOAT_MAX => nSteps;
-        tempo(120.0);
+        tempo(nTempo);
         //swingAmount(.2);
         stepDivider(4);
         play(1);
@@ -31,6 +31,8 @@ public class Clock{
             metro => metroEnv => dac;
         }
     }
+
+    fun void init(){init(120);}
     
     fun void wait(){
         if(swingMode == 0){

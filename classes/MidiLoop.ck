@@ -3,10 +3,12 @@ public class MidiLooper{
     MidiMsg msgs[0];
     OscRecv orec;
     orec.event("/c,f")@=>OscEvent clockEvent;
+    8=>int clockDiv;
     time delta;
     dur stopDur;
     int recording;
     int recordArmed;
+    int muted;
     Shred playShred,stopShred;
     Event msgReady;
     MidiMsg curMsg;
@@ -36,11 +38,24 @@ public class MidiLooper{
         1=>recording;
         now=>delta;
     }
+
+    fun void clear(){
+    	stop();
+    	msgs.clear();
+    	0=>recording;
+    }
+
+    fun int mute(){return muted;}
+    fun int mute(int m){
+    	if(m)1=>muted;
+    	else 0=>muted;
+    	return muted;
+    }
     
     fun void downbeat(){
         clockEvent=>now;
         while(clockEvent.nextMsg()){
-            if(clockEvent.getFloat()$int%4){
+            if(clockEvent.getFloat()$int%clockDiv){
                 downbeat();
             }
         }
@@ -69,7 +84,9 @@ public class MidiLooper{
             for(int i;i<msgs.cap();i++){
                 msgs[i].when=>now;
                 msgs[i]@=>curMsg;
-                msgReady.broadcast();
+                if(!muted){
+                	msgReady.broadcast();
+                }
             }
             stopDur=>now;
         }
