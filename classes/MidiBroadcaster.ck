@@ -5,8 +5,7 @@ public class MidiBroadcaster{
     Shred loopShred;
     
     fun void init(){
-    	openMidi(0);
-        spork~loop()@=>loopShred;
+    	init(0);
     }
     
     fun void init(int port){
