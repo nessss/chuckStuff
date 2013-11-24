@@ -20,6 +20,12 @@ public class MidiLooper{
         orec.listen();
     }
     
+    fun void initControlButtons(MidiBroadcaster mB, MidiOut mout, int cc1, int cc2, int cc3){
+        initRecButton(mB, mout, cc1);
+        initClrButton(mB, mout, cc2);
+        initMuteButton(mB, mout, cc3);
+    }
+
     fun void initRecButton(MidiBroadcaster mB, MidiOut mout, int cc){
         spork~recButton(mB, mout, cc);
     }    
@@ -45,6 +51,7 @@ public class MidiLooper{
                 }
                 else{ 
                     record();
+                    blinkRecShred.exit();
                     spork ~ blinkRec(mout,cc) @=> blinkRecShred;
                 }
             }
@@ -99,12 +106,6 @@ public class MidiLooper{
                 }
             }
         }
-    }
-    
-    fun void initControlButtons(MidiBroadcaster mB, MidiOut mout, int cc1, int cc2, int cc3){
-        initRecButton(mB, mout, cc1);
-        initClrButton(mB, mout, cc2);
-        initMuteButton(mB, mout, cc3);
     }
     
     fun void addMsg(MidiMsg msg){
