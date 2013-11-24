@@ -48,8 +48,7 @@ public class MidiLooper{
         MidiMsg msg;
         while(mB.mev=>now){
             mB.mev.msg @=> msg;
-            //<<<msg.data2>>>;
-            if(msg.data1 == 0x90 & msg.data3 > 0){
+            if(msg.data1 == 0x90 ){
                 if(msg.data2 == cc){
                     if(recording){
                         stop();
@@ -82,7 +81,7 @@ public class MidiLooper{
         MidiMsg msg;
         while(mB.mev=>now){
             mB.mev.msg @=> msg;
-            if(msg.data1 == 0x90 & msg.data3 > 0){
+            if(msg.data1 == 0x90 ){
                 if(msg.data2 == cc){
                     if(msg.data3>0){
                         clear();
@@ -103,7 +102,7 @@ public class MidiLooper{
         
         while(mB.mev=>now){
             mB.mev.msg @=> msg;
-            if(msg.data1 == 0x90 & msg.data3 > 0){
+            if(msg.data1 == 0x90 ){
                 if(msg.data2 == cc){
                     mute();
                     if(muted){
@@ -120,7 +119,7 @@ public class MidiLooper{
     }
     
     fun void addMsg(MidiMsg msg){
-        if(msg.data1 == 0x90 & msg.data3 > 0){
+        if(msg.data1 == 0x90 | msg.data1 == 0x80){
             if(!(msg.data2 == ctrlCCs[0] | msg.data2 == ctrlCCs[1] | msg.data2 == ctrlCCs[2] )){
                 msg@=>MidiMsg newMsg;
                 chout<=newMsg.data2<=IO.nl();
