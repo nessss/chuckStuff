@@ -10,8 +10,7 @@ public class MidiLooper{
     int recordArmed;
     int muted;
     Shred playShred,stopShred, blinkRecShred;
-    Event msgReady;
-    MidiMsg curMsg;
+    MidiEvent curMsg;
     MidiOut mout;
     
     
@@ -173,9 +172,9 @@ public class MidiLooper{
         while(true){
             for(int i;i<msgs.cap();i++){
                 msgs[i].when=>now;
-                msgs[i]@=>curMsg;
+                msgs[i]@=>curMsg.msg;
                 if(!muted){
-                    msgReady.broadcast();
+                    curMsg.broadcast();
                 }
             }
             stopDur=>now;
