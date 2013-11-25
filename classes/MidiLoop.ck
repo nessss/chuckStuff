@@ -15,6 +15,13 @@ public class MidiLooper{
     int ctrlCCs[3];
     Event downbeat;
     int clearFlag;
+    2=>int recOnColor;
+    0=>int recOffColor;
+    8=>int clearOnColor;
+    7=>int clearOffColor;
+    4=>int muteColor;
+    3=>int notMuteColor;
+    0.375::second=>dur blinkDur;
     
     
     fun void init(){
@@ -37,6 +44,11 @@ public class MidiLooper{
     fun void initClrButton(MidiBroadcaster mB, MidiOut mout, int cc){
         spork~clrButton(mB, mout, cc);
         cc=>ctrlCCs[1];
+        MidiMsg msg;
+        0x90=>msg.data1;
+        cc=>msg.data2;
+        clearOffColor=>msg.data3;
+        mout.send(msg);
     }
     
     fun void initMuteButton(MidiBroadcaster mB, MidiOut mout, int cc){
@@ -62,18 +74,19 @@ public class MidiLooper{
                 }
             }
         }
-    }    
+    }
     
     fun void blinkRec(MidiOut mout, int cc){
         MidiMsg msg;
         144=>msg.data1;
         cc=>msg.data2;
         while(true){
-            100 => msg.data3;
+            recOnColor => msg.data3;
             mout.send(msg);
-            100::ms=>now;
-            0 => msg.data3;
-            100::ms=>now;
+            blinkDur=>now;
+            recOffColor => msg.data3;
+            mout.send(msg);
+            blinkDur=>now;
         }
     }
     
@@ -81,43 +94,43 @@ public class MidiLooper{
         MidiMsg msg;
         while(mB.mev=>now){
             mB.mev.msg @=> msg;
-            if(msg.data1 == 0x90 ){
-                if(msg.data2 == cc){
-                    if(msg.data3>0){
+            if(msg.data2 == cc){
+            	if(msg.data1 == 0x90 ){
+                    	if(blinkRecShred.running())blinkRecShred.exit();
                         clear();
+                        clearOnColor=>msg.data3;
                         mout.send(msg);
-                    }
-                    else{ 
-                        mout.send(msg);
-                    }
+                }else if(msg.data1 == 0x80){ 
+                	0x90=>msg.data1;
+                    clearOffColor=>msg.data3;
+                    mout.send(msg);
                 }
             }
         }
     }    
-    
+
     fun void muteButton(MidiBroadcaster mB, MidiOut mout, int cc){
         MidiMsg msg;
-        int onClr;
-        int offClr;
-        
+
         while(mB.mev=>now){
             mB.mev.msg @=> msg;
             if(msg.data1 == 0x90 ){
                 if(msg.data2 == cc){
-                    mute();
-                    if(muted){
-                        onClr => msg.data3;
+                    if(mute(!mute())){
+                        muteColor => msg.data3;
                         mout.send(msg);
+                        chout<="MUTU"<=IO.nl();
                     }
                     else{ 
-                        offClr => msg.data3;
+                        notMuteColor => msg.data3;
                         mout.send(msg);
+                        chout<="UTUM"<=IO.nl();
                     }
                 }
             }
         }
     }
-    
+
     fun void addMsg(MidiMsg msg){
         if(msg.data1 == 0x90 | msg.data1 == 0x80){
             if(!(msg.data2 == ctrlCCs[0] | msg.data2 == ctrlCCs[1] | msg.data2 == ctrlCCs[2] )){
@@ -131,12 +144,12 @@ public class MidiLooper{
             }
         }
     }
-    
+
     fun void record(){
         recordShred.exit();
         spork~_record()@=>recordShred;
     }
-    
+
     fun void _record(){
         downbeat => now;
         chout<="Downbeat reached..."<=IO.nl();
@@ -145,7 +158,7 @@ public class MidiLooper{
         1=>recording;
         now=>delta;
     }
-    
+
     fun void clear(){
         stopShred.exit();
         playShred.exit();
@@ -153,14 +166,14 @@ public class MidiLooper{
         while(playShred.running())samp=>now;
         0=>recording;
     }
-    
+
     fun int mute(){return muted;}
     fun int mute(int m){
         if(m)1=>muted;
         else 0=>muted;
         return muted;
     }
-    
+
     fun void downbeatLoop(){
         while(clockEvent=>now){
             while(clockEvent.nextMsg()){
@@ -171,12 +184,12 @@ public class MidiLooper{
             }
         }
     }
-    
+
     fun void stop(){
         if(stopShred.running())stopShred.exit();
         spork~_stop()@=>stopShred;
     }
-    
+
     fun void _stop(){
         downbeat => now;
         if(playShred.running())playShred.exit();
@@ -189,8 +202,8 @@ public class MidiLooper{
         }
         while(samp=>now);
     }
-    
-    
+
+
     fun void play(){
         //chout<="Play function"<=IO.nl();
         //chout<=msgs.cap()<=IO.nl();
