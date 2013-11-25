@@ -9,12 +9,14 @@ public class Clock{
     Shred loopS;
     SinOsc metro;
     ADSR metroEnv;
-    OscSend xmit;
+    OscSend locXmit;
+    OscSend netXmit[0];
+    int networking;
     
     
     //Functions
     fun void init(float nTempo){
-        xmit.setHost("localhost", 98765);
+        locXmit.setHost("localhost", 98765);
         1 => stepDiv;
         0 => metroOn;
         0 => swingMode;
@@ -31,7 +33,13 @@ public class Clock{
             metro => metroEnv => dac;
         }
     }
-
+    
+    fun void initNetOsc(string adr, int port){
+        1 => networking;
+        netXmit << new OscSend;
+        netXmit[netXmit.cap()-1].setHost(adr,port);
+    }
+    
     fun void init(){init(120);}
     
     fun void wait(){
@@ -94,8 +102,14 @@ public class Clock{
         now => lastStep;
         if(cStep+1 < nSteps) 1 +=> cStep;
         else 0 => cStep;
-        xmit.startMsg("/c, f");
-        xmit.addFloat(cStep);
+        locXmit.startMsg("/c, f");
+        locXmit.addFloat(cStep);
+        if(networking){
+            for(int i; i<netXmit.cap(); i++){
+                netXmit[i].startMsg("/c, f");
+                netXmit[i].addFloat(cStep);
+            }
+        }
         //<<<cStep>>>;
         if(metroOn){ 
             metroEnv.keyOff();
@@ -125,8 +139,14 @@ public class Clock{
             now => lastStep; //play/if already playing, re-cue
             0 => cStep;
             1 => playing;
-            xmit.startMsg("/c, f");
-            xmit.addFloat(cStep);
+            locXmit.startMsg("/c, f");
+            locXmit.addFloat(cStep);
+            if(networking){
+                for(int i; i<netXmit.cap(); i++){
+                    netXmit[i].startMsg("/c, f");
+                    netXmit[i].addFloat(cStep);
+                }
+            }
         }
         else 0 => playing; //if p = 0, stop
         return playing;
