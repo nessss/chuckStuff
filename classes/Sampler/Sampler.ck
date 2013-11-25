@@ -9,6 +9,7 @@ public class Sampler{
     string paths[0];
     int numSounds;
     Shred triggerShred[];
+    int chucked[];
     
     fun void init(string folder){
         getPaths(folder)@=>paths;
@@ -19,6 +20,7 @@ public class Sampler{
         new Pan2[paths.size()]@=>dry;
         new int[paths.size()]@=>voices;
         new Shred[paths.size()]@=>triggerShred;
+        new int[paths.size()]@=>chucked;
         
         for(int i;i<paths.size();i++){
             buf[i].read(paths[i]);
@@ -74,7 +76,7 @@ public class Sampler{
     
     fun UGen connectedUGen(int b){
         if(buf[b].output.isConnectedTo(dry[b])){
-            chout<="I'm dry!"<=IO.nl();
+            //chout<="I'm dry!"<=IO.nl();
             return dry[b];
         }
         return dry[b];
@@ -114,19 +116,30 @@ public class Sampler{
     
     //--------------------------| SNDBUF FUNCTIONS |--------------------------
     
-    fun void trigger(int b){spork~_trigger(b)@=>triggerShred[b];}
+    fun void trigger(int b){
+    	//triggerShred[b].exit();
+    	spork~_trigger(b);//@=>triggerShred[b];
+    }
     
     fun void _trigger(int b){
-        connectedUGen(b)=<output;
-        connectedUGen(b)=>output;
+    	//chout<=buf[b].gain()<=IO.nl();
+    	//chout<=chucked[b]<=" "<=voices[b]<=IO.nl();
+    	if(chucked[b]){
+    		buf[b].stop();
+    		100::samp=>now;
+    	}
+        if(!chucked[b]){
+        	//chout<="chucking"<=IO.nl();
+        	connectedUGen(b)=>output;
+       		1=>chucked[b];
+       	}
         voices[b]++;
         buf[b].trigger();
+        //chout<=buf[b].lengthDuration()/second<=IO.nl();
         buf[b].lengthDuration()=>now;
-        if(--voices[b]<=0){
-            100::ms=>now;
-            if(voices[b]<=0)
-        		buf[b].stop();
-        }
+        //buf[b].done=>now;
+    	voices[b]--;
+        stop(b);
     }
     
     fun int isPlaying(int b){
@@ -135,12 +148,35 @@ public class Sampler{
     }
     
     fun void stop(int b){
+    	if(isPlaying(b)){
+        	//chout<="decrement "<=voices[b]<=IO.nl();
+        	//triggerShred[b].exit();
+        	buf[b].done.broadcast();
+        	//0=>voices[b];
+        	100::samp=>now;
+        	if(voices[b]<=0 & chucked[b]){
+        		//chout<="unchucking"<=IO.nl();
+    			buf[b].stop();
+    			100::samp=>now;
+    			if(!voices[b]){
+        			connectedUGen(b)=<output;
+        			0=>chucked[b];
+        		}
+        	}
+        }
+    }
+
+    fun void choke(int b){
     	buf[b].stop();
         //triggerShred[b].exit();
-        //buf[b].done.broadcast();
+        buf[b].done.broadcast();
         //0=>voices[b];
-        //100::samp=>now;
-        //connectedUGen(b)=<output;
+        100::samp=>now;
+        if(chucked[b]){
+        	//chout<="unchucking"<=IO.nl();
+        	connectedUGen(b)=<output;
+        	0=>chucked[b];
+        }
     }
 
     

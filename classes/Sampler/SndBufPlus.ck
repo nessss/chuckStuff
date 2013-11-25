@@ -14,8 +14,10 @@ public class SndBufPlus extends Chubgraph{
 	int lengthSamps;
     
     int voices;
+    1=>float myGain;
 
 	Event done;
+	Shred stopShred;
 
 	fun void init(){
 		0::samp=>startDur;
@@ -44,11 +46,11 @@ public class SndBufPlus extends Chubgraph{
         }
 	}
 
-	fun void stop(){spork~_stop();}
+	fun void stop(){spork~_stop()@=>stopShred;}
 	fun void _stop(){
-		buf.gain()=>float beginGain;
-		for(int i;i<100;i++){
-			buf.gain()-beginGain/100=>buf.gain;
+		myGain=>buf.gain;
+		for(int i;i<99;i++){
+			buf.gain()-myGain/99=>buf.gain;
 			samp=>now;
 		}
 			
@@ -57,7 +59,8 @@ public class SndBufPlus extends Chubgraph{
 		}else{
 			pos(0);
 		}
-		beginGain=>buf.gain;
+		myGain=>buf.gain;
+		//chout<="FUCK SHIT CUNT FAG"<=IO.nl();
 	}
 
 	fun void reverse(){
@@ -236,8 +239,11 @@ public class SndBufPlus extends Chubgraph{
 	}
 
 	//------------------------|     NORMALIZE    |-----------------------
-	fun float gain(){return buf.gain();}
-	fun float gain(float g){return buf.gain(g);}
+	fun float gain(){return myGain;}
+	fun float gain(float g){
+		g=>myGain;
+		return buf.gain(g);
+	}
 
 	fun void normalize(){
 		float max;
