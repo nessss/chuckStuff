@@ -122,14 +122,11 @@ public class Sampler{
         voices[b]++;
         buf[b].trigger();
         buf[b].lengthDuration()=>now;
-        buf[b].stop();
-        /*
         if(--voices[b]<=0){
             100::ms=>now;
             if(voices[b]<=0)
-                connectedUGen(b)=<output;
+        		buf[b].stop();
         }
-        */
     }
     
     fun int isPlaying(int b){
@@ -138,12 +135,14 @@ public class Sampler{
     }
     
     fun void stop(int b){
+    	buf[b].stop();
         //triggerShred[b].exit();
-        buf[b].done.broadcast();
+        //buf[b].done.broadcast();
         //0=>voices[b];
         //100::samp=>now;
         //connectedUGen(b)=<output;
     }
+
     
     fun float pitch(int b,float s){
         return rate(b,Std.mtof(s)/Std.mtof(60.0));

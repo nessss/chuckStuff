@@ -122,7 +122,7 @@ public class MidiLooper{
         if(msg.data1 == 0x90 | msg.data1 == 0x80){
             if(!(msg.data2 == ctrlCCs[0] | msg.data2 == ctrlCCs[1] | msg.data2 == ctrlCCs[2] )){
                 msg@=>MidiMsg newMsg;
-                chout<=newMsg.data2<=IO.nl();
+                //chout<=newMsg.data2<=IO.nl();
                 if(recording){
                     now-delta=>newMsg.when;
                     now=>delta;
@@ -185,21 +185,21 @@ public class MidiLooper{
             now-delta=>stopDur;
             chout<="Playing..."<=IO.nl();
             spork~play()@=>playShred;
-            chout<=playShred.running()<=IO.nl();
+            //chout<=playShred.running()<=IO.nl();
         }
         while(samp=>now);
     }
     
     
     fun void play(){
-        chout<="Play function"<=IO.nl();
-        chout<=msgs.cap()<=IO.nl();
+        //chout<="Play function"<=IO.nl();
+        //chout<=msgs.cap()<=IO.nl();
         while(true){
             for(int i;i<msgs.cap();i++){
-                chout<=msgs[i].when/samp<=IO.nl();
+                //chout<=msgs[i].when/samp<=IO.nl();
                 msgs[i].when=>now;
                 msgs[i]@=>curMsg.msg;
-                <<<curMsg.msg.data2>>>;
+                //<<<curMsg.msg.data2>>>;
                 if(!muted){
                     curMsg.broadcast();
                 }
