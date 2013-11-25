@@ -15,10 +15,10 @@ public class MidiLooper{
     int ctrlCCs[3];
     Event downbeat;
     int clearFlag;
-    2=>int recOnColor;
-    0=>int recOffColor;
-    8=>int clearOnColor;
-    7=>int clearOffColor;
+    6=>int recOnColor;
+    7=>int recOffColor;
+    37=>int clearOnColor;
+    36=>int clearOffColor;
     4=>int muteColor;
     3=>int notMuteColor;
     0.375::second=>dur blinkDur;
@@ -29,6 +29,16 @@ public class MidiLooper{
         orec.listen();
         spork~downbeatLoop();
     }
+
+/*
+    fun void colorSelect(MidiBroadcaster mB){
+    	while(mB.mev=>now){
+    		mB.mev.msg @=> MidiMsg msg;
+    		if(msg.data1==0xB0){
+    			if(msg.data2==79){
+    				if(msg.data3<64)msg.data3+=>clearOffColor;
+    				else msg.data3
+    				*/
     
     fun void initControlButtons(MidiBroadcaster mB, MidiOut mout, int cc1, int cc2, int cc3){
         initRecButton(mB, mout, cc1);
@@ -39,6 +49,11 @@ public class MidiLooper{
     fun void initRecButton(MidiBroadcaster mB, MidiOut mout, int cc){
         spork~recButton(mB, mout, cc);
         cc=>ctrlCCs[0];
+        MidiMsg msg;
+        0x90=>msg.data1;
+        cc=>msg.data2;
+        recOffColor=>msg.data3;
+        mout.send(msg);
     }    
     
     fun void initClrButton(MidiBroadcaster mB, MidiOut mout, int cc){
@@ -54,6 +69,11 @@ public class MidiLooper{
     fun void initMuteButton(MidiBroadcaster mB, MidiOut mout, int cc){
         spork~muteButton(mB, mout, cc);
         cc=>ctrlCCs[2];
+        MidiMsg msg;
+        0x90=>msg.data1;
+        cc=>msg.data2;
+        notMuteColor=>msg.data3;
+        mout.send(msg);
     }
     
     fun void recButton(MidiBroadcaster mB, MidiOut mout, int cc){
@@ -119,12 +139,10 @@ public class MidiLooper{
                     if(mute(!mute())){
                         muteColor => msg.data3;
                         mout.send(msg);
-                        chout<="MUTU"<=IO.nl();
                     }
                     else{ 
                         notMuteColor => msg.data3;
                         mout.send(msg);
-                        chout<="UTUM"<=IO.nl();
                     }
                 }
             }
