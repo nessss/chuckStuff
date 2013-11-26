@@ -295,7 +295,8 @@ public class MidiLooper{
                     break;
                 }
             }
-            stopDur=>now;
+            //stopDur=>now;
+            downbeat=>now;
         }
     }
 }
