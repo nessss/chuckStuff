@@ -1,3 +1,8 @@
+//Virtual Analog Diode Ladder Filter 
+//Ported from Will Pirkle's app notes/C++ project files:
+//http://www.willpirkle.com/project-gallery/app-notes/#AN6
+//Ported by Bruce Lott, Ness Morris, and Owen Vallis
+//December 2013
 public class CVADiodeLadderFilter extends Chugen{
     CVAOnePoleFilterEx m_LPF1;
     CVAOnePoleFilterEx m_LPF2;

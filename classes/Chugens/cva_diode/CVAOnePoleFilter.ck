@@ -1,3 +1,8 @@
+//Virtual Analog One Pole Filter
+//Ported from Will Pirkle's app notes/C++ project files:
+//http://www.willpirkle.com/project-gallery/app-notes/#AN6
+//Ported by Bruce Lott, Ness Morris, and Owen Vallis
+//December 2013
 public class CVAOnePoleFilterEx
 {
     // common variables
@@ -15,7 +20,7 @@ public class CVAOnePoleFilterEx
     float m_da0;  // filter gain
     float m_dFeedback; // Feed Back storage register (not a delay register)
     float m_dZ1; // our z-1 storage location
-    int cnt;
+    
     //Functions
     fun void init(){
         1.0 => m_dAlpha;
@@ -39,8 +44,8 @@ public class CVAOnePoleFilterEx
     fun void reset(){ 0 => m_dZ1; }
     
     fun float doFilter(float xn)
-    {        (xn*m_dGamma + m_dFeedback + m_dEpsilon*getFeedbackOutput()) => float x_in;
-        
+    {        
+        (xn*m_dGamma + m_dFeedback + m_dEpsilon*getFeedbackOutput()) => float x_in;
         (m_da0*x_in - m_dZ1)*m_dAlpha => float vn;
         vn + m_dZ1 => float out;
         vn + out => m_dZ1;
