@@ -7,8 +7,8 @@ public class Foldback extends Chugen{
         1.0/thresh=>gain;
         in=>out;
         Math.sgn(in)=>float sgn;
-        while(out>thresh)index*(out-thresh)-=>out;}
-        while(out<(-1.0*thresh)){index*(out+thresh)-=>out;}
+        while(out>thresh)index*(out-thresh)-=>out;
+        while(out<(-1.0*thresh))index*(out+thresh)-=>out;
         return out;
     }
 }
