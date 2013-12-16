@@ -13,6 +13,11 @@ public class OverSampler extends Chugen{
 	float alpha[0]; // to be set in init
 	float distortBuffer[0];
 
+
+	// foldback variables
+    0.6 => float foldThresh;
+    2.0 => float foldIndex;
+    
 	fun void printCoef(){
 		for(int i;i<alpha.cap();i++){
 			chout<=alpha[i]<=IO.nl();
@@ -46,7 +51,6 @@ public class OverSampler extends Chugen{
 
 	fun float[] calcCoef(float os_freq,int os_factor,float sRate){
 		os_freq/(os_factor*sRate)=>float normFreq;
-		chout<="Norm freq: "<=normFreq<=IO.nl();
 		Math.pow(os_factor,2)$int=>int numCoef;
 		float result[numCoef];
 		((numCoef-1.0)/2.0)$int=>int m_2;  // middle coefficient
@@ -62,7 +66,6 @@ public class OverSampler extends Chugen{
 			Math.cos((i$float/(numCoef-1))*2*TWOPI)*0.076849=>float blackmanCoef_b;
 			0.42659-blackmanCoef_a+blackmanCoef_b=>float blackmanCoef;
 			blackmanCoef*=>result[i];
-			chout<="blackman coef "<=i<=": "<=blackmanCoef<=IO.nl();
 		}
 		return result;
 	}
@@ -99,9 +102,13 @@ public class OverSampler extends Chugen{
 		}
 		return y;
 	}
-
-	fun float distort(float x){
-		return Math.sin(x);
-		//return x/(Math.fabs(x)+1); // sigmoid function
-	}	
+    
+    fun float distort(float in){
+        0=>float out;
+        1.0/foldThresh=>float gain;
+        in=>out;
+        while(out>foldThresh)foldIndex*(out-foldThresh)-=>out;
+        while(out<(-1.0*foldThresh))foldIndex*(out+foldThresh)-=>out;
+        return out*gain;
+    }
 }
