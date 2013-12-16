@@ -219,7 +219,7 @@ public class MidiLooper{
     	1=>waitingForDownbeat;
         downbeat => now;
         0=>waitingForDownbeat;
-        chout<="Downbeat reached..."<=IO.nl();
+        //chout<="Downbeat reached..."<=IO.nl();
         playShred.exit();
         msgs.clear();
         1=>recording;
@@ -269,7 +269,7 @@ public class MidiLooper{
         if(recording){
             0=>recording;
             now-delta=>stopDur;
-            chout<="Playing..."<=IO.nl();
+            //chout<="Playing..."<=IO.nl();
             spork~play()@=>playShred;
             //chout<=playShred.running()<=IO.nl();
         }
