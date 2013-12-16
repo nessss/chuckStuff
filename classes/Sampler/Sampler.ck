@@ -1,5 +1,6 @@
 public class Sampler{
-    SndBufN buf[];
+    //SndBufN buf[];
+    SndBufPlus buf[];
     LPF lpf[];
     HPF hpf[];
     BPF bpf[];
@@ -13,7 +14,7 @@ public class Sampler{
     
     fun void init(string folder){
         getPaths(folder)@=>paths;
-        new SndBufN[paths.size()]@=>buf;
+        new SndBufPlus[paths.size()]@=>buf;
         new LPF[paths.size()]@=>lpf;
         new HPF[paths.size()]@=>hpf;
         new BPF[paths.size()]@=>bpf;
@@ -25,7 +26,7 @@ public class Sampler{
         for(int i;i<paths.size();i++){
             buf[i].read(paths[i]);
             buf[i].pos(buf[i].samples());
-            buf[i].output=>dry[i];
+            buf[i]=>dry[i];
         }
         paths.cap()=>numSounds;
     }
@@ -75,7 +76,7 @@ public class Sampler{
     }
     
     fun UGen connectedUGen(int b){
-        if(buf[b].output.isConnectedTo(dry[b])){
+        if(buf[b].isConnectedTo(dry[b])){
             //chout<="I'm dry!"<=IO.nl();
             return dry[b];
         }
@@ -84,15 +85,15 @@ public class Sampler{
     }
     
     fun void setFilter(int b,string f){
-        buf[b].output=<connectedUGen(b);
+        buf[b]=<connectedUGen(b);
         if(f=="LPF"){
-            buf[b].output=>lpf[b];
+            buf[b]=>lpf[b];
         }else if(f=="HPF"){
-            buf[b].output=>hpf[b];
+            buf[b]=>hpf[b];
         }else if(f=="BPF"){
-            buf[b].output=>bpf[b];
+            buf[b]=>bpf[b];
         }else if(f=="none"){
-            buf[b].output=>dry[b];
+            buf[b]=>dry[b];
         }
     }
     
@@ -184,11 +185,11 @@ public class Sampler{
         return rate(b,Std.mtof(s)/Std.mtof(60.0));
     }
     
-    fun int samples(int b,int s){return buf[b].samples(s);}
+    fun int samples(int b){return buf[b].samples();}
     
-    fun int[] samplesAll(int b,int s){
+    fun int[] samplesAll(int b){
         int results[buf.size()];
-        for(int i;i<results.size();i++)buf[i].samples(s)=>results[i];
+        for(int i;i<results.size();i++)buf[i].samples()=>results[i];
         return results;
     }
     
@@ -218,7 +219,7 @@ public class Sampler{
         return results;
     }
     
-    fun float valueAt(int b,int sample,int s){return buf[b].valueAt(s,sample);}
+    fun float valueAt(int b,int sample){return buf[b].valueAt(sample);}
     
     fun int loop(int b){return buf[b].loop();}
     fun int loop(int b,int l){return buf[b].loop(l);}
